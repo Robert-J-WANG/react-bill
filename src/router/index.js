@@ -1,4 +1,4 @@
-import { Layout } from "@/pages/Layout";
+import Layout from "@/pages/Layout";
 import { Month } from "@/pages/Month";
 import { New } from "@/pages/New";
 import { Year } from "@/pages/Year";
@@ -10,7 +10,7 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        // path: "/month",
+        path: "/month",
         index: true,
         element: <Month />,
       },
