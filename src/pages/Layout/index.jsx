@@ -1,9 +1,15 @@
+import { getBillList } from "@/store/Modules/billStore";
 import { Button } from "antd-mobile";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 
 export const Layout = () => {
+  // 页面初次渲染时，触发异步函数，更新并获取状态数据
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getBillList());
+  }, [dispatch]);
   return (
     <div>
       <Outlet />
