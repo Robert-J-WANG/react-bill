@@ -1,10 +1,9 @@
+// vscode联想提示功能的配置
 {
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@/*": ["src/*"]
     }
   }
 }
