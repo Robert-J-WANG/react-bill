@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = {
   devServer: {
-    port: 3006,
+    port: 3005,
   },
   webpack: {
     alias: {
