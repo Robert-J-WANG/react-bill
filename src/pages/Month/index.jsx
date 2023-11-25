@@ -1,16 +1,22 @@
 import { NavBar, DatePicker } from "antd-mobile";
 import "./index.scss";
 import classNames from "classnames";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import dayjs from "dayjs";
+import { useSelector } from "react-redux";
+import _ from "lodash";
 
 const Month = () => {
+  /* ------------------- 1. 时间弹窗的打开和关闭功能 ------------------ */
   // 控制时间弹窗的打开和关闭
   const [dateVisible, setDateVisible] = useState(false);
+
+  /* -------------------- 2.所选时间的回显及格式化 ------------------- */
   // 显示时间的变量
   const [currentDate, setCurrentDate] = useState(
-    dayjs(new Date()).format("YY-MM") //初始化时间为当前时间,并进行格式化
+    dayjs(new Date()).format("YYYY-MM") //初始化时间为当前时间,并进行格式化
   );
+
   // 点击确认的回调
   const onComfirm = (date) => {
     // 关闭时间弹窗
@@ -21,6 +27,16 @@ const Month = () => {
     const formatDate = dayjs(date).format("YYYY-MM");
     setCurrentDate(formatDate);
   };
+  /* ---------------------- 3.数据按月分组 ---------------------- */
+  //3.1 从redux中拿到数据
+  const billList = useSelector((state) => state.bill.billList);
+  // 3.2 数据的二次处理，使用useMemo钩子
+  const monthGroup = useMemo(() => {
+    // return 出去处理后的数据
+    //3.3 按月分组 - 分组方法使用lodash库，并对时间进行格式化
+    return _.groupBy(billList, (item) => dayjs(item.date).format("YYYY-MM"));
+  }, [billList]);
+  console.log(monthGroup);
   return (
     <div className="monthlyBill">
       <NavBar className="nav" backArrow={false}>
