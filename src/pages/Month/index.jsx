@@ -8,27 +8,17 @@ import _ from "lodash";
 
 const Month = () => {
   /* ------------------- 1. 时间弹窗的打开和关闭功能 ------------------ */
-  // 控制时间弹窗的打开和关闭
+  // 1.1 控制时间弹窗的打开和关闭
   const [dateVisible, setDateVisible] = useState(false);
 
   /* -------------------- 2.所选时间的回显及格式化 ------------------- */
-  // 显示时间的变量
+  // 2.1 显示时间的变量
   const [currentDate, setCurrentDate] = useState(
     dayjs(new Date()).format("YYYY-MM") //初始化时间为当前时间,并进行格式化
   );
 
-  // 点击确认的回调
-  const onComfirm = (date) => {
-    // 关闭时间弹窗
-    setDateVisible(false);
-    // 设置所选时间
-    console.log(date);
-    // 格式化时间弹框里的时间，并设置为所选时间
-    const formatDate = dayjs(date).format("YYYY-MM");
-    setCurrentDate(formatDate);
-  };
   /* ---------------------- 3.数据按月分组 ---------------------- */
-  //3.1 从redux中拿到数据
+  // 3.1 从redux中拿到数据
   const billList = useSelector((state) => state.bill.billList);
   // 3.2 数据的二次处理，使用useMemo钩子
   const monthGroup = useMemo(() => {
@@ -36,7 +26,43 @@ const Month = () => {
     //3.3 按月分组 - 分组方法使用lodash库，并对时间进行格式化
     return _.groupBy(billList, (item) => dayjs(item.date).format("YYYY-MM"));
   }, [billList]);
-  console.log(monthGroup);
+  // console.log(monthGroup);
+
+  /* ------------------- 4. 计算按月分组之后的数据 ------------------- */
+  // 4.1 当前月份对应的数据数组
+  const [currentMonthList, setCurrentMonthList] = useState([]);
+  // 4.3 对当前月份的数组数据二次计算
+  const monthResult = useMemo(() => {
+    // return出去二次计算后的数据
+    // 支出 / 收入 / 结余
+    const pay = currentMonthList
+      .filter((item) => item.type === "pay")
+      .reduce((a, c) => a + c.money, 0);
+    const income = currentMonthList
+      .filter((item) => item.type === "income")
+      .reduce((a, c) => a + c.money, 0);
+    return {
+      pay,
+      income,
+      total: pay + income,
+    };
+  }, [currentMonthList]);
+  // 4.4 解构出计算结果用于组件中回显数据
+  const { pay, income, total } = monthResult;
+
+  // 点击确认的回调
+  const onComfirm = (date) => {
+    // console.log(date)
+    // 1.2 关闭时间弹窗
+    setDateVisible(false);
+    //  格式化时间弹框里的时间，
+    const formatDate = dayjs(date).format("YYYY-MM");
+    // 2.2 设置为所选时间
+    setCurrentDate(formatDate);
+    // 4.2 找到选择月份按月分组之后的对应的数组
+    setCurrentMonthList(monthGroup[formatDate]);
+  };
+
   return (
     <div className="monthlyBill">
       <NavBar className="nav" backArrow={false}>
@@ -58,17 +84,18 @@ const Month = () => {
             ></span>
           </div>
           {/* 统计区域 */}
+          {/* 4.5 当前月份数据的回显 */}
           <div className="twoLineOverview">
             <div className="item">
-              <span className="money">{100}</span>
+              <span className="money">{pay.toFixed(2)}</span>
               <span className="type">支出</span>
             </div>
             <div className="item">
-              <span className="money">{200}</span>
+              <span className="money">{income.toFixed(2)}</span>
               <span className="type">收入</span>
             </div>
             <div className="item">
-              <span className="money">{200}</span>
+              <span className="money">{total.toFixed(2)}</span>
               <span className="type">结余</span>
             </div>
           </div>
