@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import "./index.scss";
 import { useMemo } from "react";
+import { billTypeToName } from "@/contants";
 // 6.4 接收dailyBill数据并渲染
 const DailyBill = ({ date, dailyBillList }) => {
   // console.log(dailyBillList);
@@ -53,7 +54,9 @@ const DailyBill = ({ date, dailyBillList }) => {
             <div className="bill" key={item.id}>
               {/* 图标 */}
               <div className="detail">
-                <div className="billType">{item.useFor}</div>
+                {/* billTypeToName-用于中英文名字的适配： */}
+                {/* billTypeToName[英文]=>中文 */}
+                <div className="billType">{billTypeToName[item.useFor]}</div>
               </div>
               <div className={classNames("money", item.type)}>
                 {item.money.toFixed(2)}
