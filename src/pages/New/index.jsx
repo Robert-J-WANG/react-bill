@@ -5,9 +5,15 @@ import classNames from "classnames";
 import { billListData } from "@/contants";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const New = () => {
   const navigate = useNavigate();
+  /* -------------------- 9.支出和收入切换功能 -------------------- */
+  // 9.1 控制收入支出的状态
+  // pay-支出，income-收入
+  const [billType, setBillType] = useState("pay");
+
   return (
     <div className="keepAccounts">
       <NavBar className="nav" onBack={() => navigate(-1)}>
@@ -16,10 +22,22 @@ const New = () => {
 
       <div className="header">
         <div className="kaType">
-          <Button shape="rounded" className={classNames("selected")}>
+          <Button
+            shape="rounded"
+            // 9.2 billType的值适配是否激活样式？
+            className={classNames(billType === "pay" ? "selected" : "")}
+            // 9.3 点击时，设置billType的值
+            onClick={() => setBillType("pay")}
+          >
             支出
           </Button>
-          <Button className={classNames("")} shape="rounded">
+          <Button
+            // 9.2 billType的值适配是否激活样式？
+            className={classNames(billType === "income" ? "selected" : "")}
+            shape="rounded"
+            // 9.3 点击时，设置billType的值
+            onClick={() => setBillType("income")}
+          >
             收入
           </Button>
         </div>
@@ -51,7 +69,8 @@ const New = () => {
 
       <div className="kaTypeList">
         {/* 数据区域 */}
-        {billListData["pay"].map((item) => {
+        {/* 9.4 billType的值适配记账列表数据 */}
+        {billListData[billType].map((item) => {
           return (
             <div className="kaType" key={item.type}>
               <div className="title">{item.name}</div>
