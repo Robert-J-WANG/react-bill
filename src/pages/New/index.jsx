@@ -33,12 +33,25 @@ const New = () => {
     const data = {
       type: billType,
       money: billType === "pay" ? -money : +money,
-      date: new Date(),
+      // 11.7 收集选择的时间
+      date: date,
       useFor: useFor,
     };
     console.log(data);
     // 10.7 提交异步方法，保存账单
     dispatch(addBillList(data));
+  };
+
+  /* --------------------- 11. 完善新增账单 --------------------- */
+  // 11.2 控制时间选择器的显示隐藏
+  const [dateVisible, setDateVisible] = useState(false);
+  //  11.5 存储选择的时间
+  const [date, setDate] = useState(dayjs().format("YYYY-MM-DD"));
+  // 11.6 点击确定时的回调
+  const onConfirm = (value) => {
+    console.log(value);
+    setDate(dayjs(value).format("YYYY-MM-DD"));
+    setDateVisible(false);
   };
 
   return (
@@ -73,12 +86,20 @@ const New = () => {
           <div className="kaForm">
             <div className="date">
               <Icon type="calendar" className="icon" />
-              <span className="text">{dayjs().format("YYYY-MM-DD")}</span>
+              <span
+                className="text" // 11.3 点击时控制显示和隐藏
+                onClick={() => setDateVisible(true)}
+              >
+                {dayjs(date).format("YYYY-MM-DD")}
+              </span>
               {/* 时间选择器 */}
               <DatePicker
                 className="kaDate"
                 title="记账日期"
                 max={new Date()}
+                visible={dateVisible}
+                onConfirm={onConfirm}
+                onCancel={() => setDateVisible(false)}
               />
             </div>
             <div className="kaInput">
@@ -106,9 +127,12 @@ const New = () => {
               <div className="list">
                 {item.list.map((item) => {
                   return (
-                    // selected
+                    // 11.1 点击激活 selected
                     <div
-                      className={classNames("item", "")}
+                      className={classNames(
+                        "item",
+                        useFor === item.type ? "selected" : ""
+                      )}
                       key={item.type}
                       // 10.4  点击图标，收集账单类型
                       onClick={() => setUseFor(item.type)}
