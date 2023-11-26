@@ -1,10 +1,11 @@
 import { NavBar, DatePicker } from "antd-mobile";
 import "./index.scss";
 import classNames from "classnames";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import _ from "lodash";
+import { closeFnSet } from "antd-mobile/es/components/dialog/show";
 
 const Month = () => {
   /* ------------------- 1. 时间弹窗的打开和关闭功能 ------------------ */
@@ -14,7 +15,8 @@ const Month = () => {
   /* -------------------- 2.所选时间的回显及格式化 ------------------- */
   // 2.1 显示时间的变量
   const [currentDate, setCurrentDate] = useState(
-    dayjs(new Date()).format("YYYY-MM") //初始化时间为当前时间,并进行格式化
+    // dayjs().format("YYYY-MM") //初始化时间为当前时间,并进行格式化
+    ""
   );
 
   /* ---------------------- 3.数据按月分组 ---------------------- */
@@ -50,6 +52,20 @@ const Month = () => {
   // 4.4 解构出计算结果用于组件中回显数据
   const { pay, income, total } = monthResult;
 
+  /* --------------- 5. 页面初始化时，就把当前月份账单显示出来 --------------- */
+  // 5.1 页面初始化操作使用uesEffect钩子
+  useEffect(() => {
+    // 5.2 以当前时间作为key,去账单数组
+    const nowDate = dayjs().format("YYYY-MM");
+    // 5.3  设置当前时间
+    setCurrentDate(nowDate);
+    // 5.4 重新计算monthResult
+    // 边界限定，防止undefined
+    if (monthGroup[nowDate]) {
+      setCurrentMonthList(monthGroup[nowDate]);
+    }
+  }, []);
+
   // 点击确认的回调
   const onComfirm = (date) => {
     // console.log(date)
@@ -60,7 +76,7 @@ const Month = () => {
     // 2.2 设置为所选时间
     setCurrentDate(formatDate);
     // 4.2 找到选择月份按月分组之后的对应的数组
-    // 边界控制，以防monthGroup[formatDate]不存在，如果不存在，怎不更新currentMonthList
+    // 边界控制，以防monthGroup[formatDate]不存在（undefined），如果不存在，怎不更新currentMonthList，即为初始值-空数组
     console.log(monthGroup[formatDate]);
     if (monthGroup[formatDate]) {
       setCurrentMonthList(monthGroup[formatDate]);
