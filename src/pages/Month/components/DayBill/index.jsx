@@ -2,6 +2,7 @@ import classNames from "classnames";
 import "./index.scss";
 import { useMemo, useState } from "react";
 import { billTypeToName } from "@/contants";
+import Icon from "@/components/Icon";
 // 6.4 接收dailyBill数据并渲染
 const DailyBill = ({ date, dailyBillList }) => {
   // console.log(dailyBillList);
@@ -26,6 +27,8 @@ const DailyBill = ({ date, dailyBillList }) => {
   /* ----------------- 7.箭头的翻转，详情列表的显示和隐藏 ----------------- */
   // 7.1 状态变量控制显隐和箭头翻转
   const [visible, setVisible] = useState(false);
+
+  /* -------------------- 8.动态获取icon图标 -------------------- */
 
   return (
     <div className={classNames("dailyBill")}>
@@ -64,6 +67,8 @@ const DailyBill = ({ date, dailyBillList }) => {
             return (
               <div className="bill" key={item.id}>
                 {/* 图标 */}
+                {/* 8.1 item.useFor传递给Icon组件 */}
+                <Icon type={item.useFor} />
                 <div className="detail">
                   {/* billTypeToName-用于中英文名字的适配： */}
                   {/* billTypeToName[英文]=>中文 */}
