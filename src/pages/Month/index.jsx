@@ -60,7 +60,11 @@ const Month = () => {
     // 2.2 设置为所选时间
     setCurrentDate(formatDate);
     // 4.2 找到选择月份按月分组之后的对应的数组
-    setCurrentMonthList(monthGroup[formatDate]);
+    // 边界控制，以防monthGroup[formatDate]不存在，如果不存在，怎不更新currentMonthList
+    console.log(monthGroup[formatDate]);
+    if (monthGroup[formatDate]) {
+      setCurrentMonthList(monthGroup[formatDate]);
+    }
   };
 
   return (
