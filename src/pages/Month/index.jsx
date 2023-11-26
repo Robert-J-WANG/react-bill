@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import _ from "lodash";
 import { closeFnSet } from "antd-mobile/es/components/dialog/show";
+import DailyBill from "./components/DayBill";
 
 const Month = () => {
   /* ------------------- 1. 时间弹窗的打开和关闭功能 ------------------ */
@@ -132,6 +133,7 @@ const Month = () => {
           />
         </div>
         {/* 单日列表统计 */}
+        <DailyBill />
       </div>
     </div>
   );
