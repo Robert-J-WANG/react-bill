@@ -61,13 +61,13 @@ const Month = () => {
     // 5.2 以当前时间作为key,去账单数组
     const nowDate = dayjs().format("YYYY-MM");
     // 5.3  设置当前时间
-    setCurrentDate(nowDate);
+    // setCurrentDate(nowDate);
     // 5.4 重新计算monthResult
     // 边界限定，防止undefined
     if (monthGroup[nowDate]) {
       setCurrentMonthList(monthGroup[nowDate]);
     }
-  }, []);
+  }, [monthGroup]);
 
   // 点击确认的回调
   const onComfirm = (date) => {

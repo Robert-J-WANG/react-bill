@@ -132,6 +132,13 @@
       "date": "2023-10-26",
       "useFor": "dessert",
       "id": 26
+    },
+    {
+      "type": "pay",
+      "money": 0,
+      "date": "2023-11-26",
+      "useFor": "travel",
+      "id": 27
     }
   ]
 }
