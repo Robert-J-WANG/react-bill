@@ -97,6 +97,27 @@
       "date": "2023-02-28T16:00:00.000Z",
       "useFor": "salary",
       "id": 21
+    },
+    {
+      "type": "pay",
+      "money": -800,
+      "date": "2023-11-26T04:07:28.476Z",
+      "useFor": "dessert",
+      "id": 22
+    },
+    {
+      "type": "pay",
+      "money": 0,
+      "date": "2023-11-26T04:08:24.603Z",
+      "useFor": "dessert",
+      "id": 23
+    },
+    {
+      "type": "pay",
+      "money": 0,
+      "date": "2023-11-26T04:08:27.810Z",
+      "useFor": "longdistance",
+      "id": 24
     }
   ]
 }
