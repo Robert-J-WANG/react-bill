@@ -16,8 +16,8 @@ const Month = () => {
   /* -------------------- 2.所选时间的回显及格式化 ------------------- */
   // 2.1 显示时间的变量
   const [currentDate, setCurrentDate] = useState(
-    // dayjs().format("YYYY-MM") //初始化时间为当前时间,并进行格式化
-    ""
+    dayjs().format("YYYY-MM") //初始化时间为当前时间,并进行格式化
+    // ""
   );
 
   /* ---------------------- 3.数据按月分组 ---------------------- */
@@ -34,6 +34,7 @@ const Month = () => {
   /* ------------------- 4. 计算按月分组之后的数据 ------------------- */
   // 4.1 当前月份对应的数据数组
   const [currentMonthList, setCurrentMonthList] = useState([]);
+  console.log(currentMonthList);
   // 4.3 对当前月份的数组数据二次计算
   const monthResult = useMemo(() => {
     // return出去二次计算后的数据
@@ -52,6 +53,7 @@ const Month = () => {
   }, [currentMonthList]);
   // 4.4 解构出计算结果用于组件中回显数据
   const { pay, income, total } = monthResult;
+  console.log(monthResult);
 
   /* --------------- 5. 页面初始化时，就把当前月份账单显示出来 --------------- */
   // 5.1 页面初始化操作使用uesEffect钩子
@@ -78,11 +80,26 @@ const Month = () => {
     setCurrentDate(formatDate);
     // 4.2 找到选择月份按月分组之后的对应的数组
     // 边界控制，以防monthGroup[formatDate]不存在（undefined），如果不存在，怎不更新currentMonthList，即为初始值-空数组
-    console.log(monthGroup[formatDate]);
+    // console.log(monthGroup[formatDate]);
     if (monthGroup[formatDate]) {
       setCurrentMonthList(monthGroup[formatDate]);
+    } else {
+      setCurrentMonthList([]);
     }
   };
+
+  /* --------------------- 6. 单日统计列表功能 -------------------- */
+  // 6.1 当前月按日期分组
+  // 数据的二次处理，使用useMemo钩子
+  const dayGroup = useMemo(() => {
+    // return 出去处理后的数据
+    //6.2 按日分组 - 分组方法使用lodash库，并对时间进行格式化
+    const groupDate = _.groupBy(currentMonthList, (item) =>
+      dayjs(item.date).format("YYYY-MM-DD")
+    );
+    const dayKeys = Object.keys(groupDate);
+    return { groupDate, dayKeys };
+  }, [currentMonthList]);
 
   return (
     <div className="monthlyBill">
@@ -133,7 +150,14 @@ const Month = () => {
           />
         </div>
         {/* 单日列表统计 */}
-        <DailyBill />
+        {/* 6.3 遍历日期列表 */}
+        {dayGroup.dayKeys.map((key) => (
+          <DailyBill
+            key={key}
+            date={key}
+            dailyBillList={dayGroup.groupDate[key]}
+          />
+        ))}
       </div>
     </div>
   );
