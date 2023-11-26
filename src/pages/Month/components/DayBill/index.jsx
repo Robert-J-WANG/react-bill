@@ -24,6 +24,7 @@ const DailyBill = ({ date, dailyBillList }) => {
 
   return (
     <div className={classNames("dailyBill")}>
+      {/* 单日列表统计区 */}
       <div className="header">
         <div className="dateIcon">
           <span className="date">{date}</span>
@@ -44,6 +45,22 @@ const DailyBill = ({ date, dailyBillList }) => {
             <span className="type">结余</span>
           </div>
         </div>
+      </div>
+      {/* 单日列表详细显示区 */}
+      <div className="billList">
+        {dailyBillList.map((item) => {
+          return (
+            <div className="bill" key={item.id}>
+              {/* 图标 */}
+              <div className="detail">
+                <div className="billType">{item.useFor}</div>
+              </div>
+              <div className={classNames("money", item.type)}>
+                {item.money.toFixed(2)}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
